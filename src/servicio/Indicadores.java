@@ -20,15 +20,23 @@ import javax.json.JsonReader;
 public class Indicadores  {
     
     private JsonObject objeto;
+    private JsonObject objeto2;
 
     public Indicadores () {}
 
    public Indicadores (String nombre) throws MalformedURLException, IOException {
         URL url = new URL("http://mindicador.cl/api/"+nombre); // nombre = dolar / euro
-
+       
         InputStream entrada = url.openStream();
         JsonReader reader = Json.createReader(entrada);
         this.objeto = reader.readObject();
+        
+        
+         URL url2 = new URL("http://mindicador.cl/api");
+         
+         InputStream entrada2= url2.openStream();
+         JsonReader reader2 = Json.createReader(entrada2);
+         this.objeto2= reader2.readObject();
     }
 
     public JsonObject getObjeto() {
@@ -57,7 +65,7 @@ public class Indicadores  {
     
     public float getValorDia(String moneda){
         float valor = 0;
-        valor = Float.parseFloat(objeto.getJsonObject(moneda).get("valor").toString());
+        valor = Float.parseFloat(objeto2.getJsonObject(moneda).get("valor").toString());
 
     return valor;
     }
