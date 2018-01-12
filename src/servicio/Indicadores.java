@@ -54,5 +54,12 @@ public class Indicadores  {
         }
          return fechas;
     }
+    
+    public float getValorDia(String moneda){
+        float valor = 0;
+        valor = Float.parseFloat(objeto.getJsonObject(moneda).get("valor").toString());
+
+    return valor;
+    }
 
 }
