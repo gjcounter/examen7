@@ -39,7 +39,7 @@ public class VistaAgregar extends javax.swing.JFrame {
         tf_precioproducto = new javax.swing.JTextField();
         boton_guardar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Agregar producto");
 
