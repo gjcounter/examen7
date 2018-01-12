@@ -19,55 +19,25 @@ import javax.json.JsonReader;
  */
 public class Indicadores  {
     
-    private JsonObject objeto;
-    private JsonObject objeto2;
 
-    public Indicadores () {}
+    public JsonObject objeto;
 
-   public Indicadores (String nombre) throws MalformedURLException, IOException {
-        URL url = new URL("http://mindicador.cl/api/"+nombre); // nombre = dolar / euro
-       
+   public Indicadores () throws MalformedURLException, IOException {
+      
+         URL url = new URL("http://mindicador.cl/api/");
+        //ahora obtenemos el objeto json a partir de esa url
         InputStream entrada = url.openStream();
         JsonReader reader = Json.createReader(entrada);
         this.objeto = reader.readObject();
-        
-        
-         URL url2 = new URL("http://mindicador.cl/api");
-         
-         InputStream entrada2= url2.openStream();
-         JsonReader reader2 = Json.createReader(entrada2);
-         this.objeto2= reader2.readObject();
     }
 
-    public JsonObject getObjeto() {
-        return objeto;
-    }
     
-    public float[] getValores (){
-        float[] valores;
-        valores = new float[objeto.getJsonArray("serie").size()];
-        
-        for (int i = 0; i < objeto.getJsonArray("serie").size(); i++){
-            valores[i] = Float.parseFloat(objeto.getJsonArray("serie").getJsonObject(i).get("valor").toString());
-        }
-         return valores;
-    }
-    
-    public String[] getFechas(){
-        String fechas[];
-        fechas = new String[objeto.getJsonArray("serie").size()];
-        
-        for (int i = 0; i < objeto.getJsonArray("serie").size(); i++){
-            fechas[i] = objeto.getJsonArray("serie").getJsonObject(i).get("fecha").toString();
-        }
-         return fechas;
-    }
-    
-    public float getValorDia(String moneda){
-        float valor = 0;
-        valor = Float.parseFloat(objeto2.getJsonObject(moneda).get("valor").toString());
-
-    return valor;
+    public Float getValorDia(String moneda) throws MalformedURLException, IOException{
+        //seleccionaremos la parte del objeto que nos interesa e imprimiremos su valor
+        float valor = Float.parseFloat(this.objeto.getJsonObject(moneda).get("valor").toString());
+        System.out.println("Valor: "+ valor);
+        System.out.println("JSON consumido :)");
+        return valor;
     }
 
 }
