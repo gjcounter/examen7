@@ -8,27 +8,32 @@ package negocio;
 import accesodatos.ProductoDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.JOptionPane;
 import presentacion.Vista;
 import presentacion.VistaAgregar;
+import servicio.Indicadores;
 
 /**
  *
  * @author Duoc UC
  */
-public class Controlador implements ActionListener {
+public class Controlador implements ActionListener  {
 
     Vista interfaz = new Vista();
     public static VistaAgregar interfazagregar = new VistaAgregar();
     
     //modelo
     private ProductoDAO modelo = new ProductoDAO();
+    
+    //valores monedas
+    public static float valordolar;
+    public static float valoreuro;
+    
+    
     
     public enum Accion{
         boton_refrescar,
@@ -51,7 +56,12 @@ public class Controlador implements ActionListener {
         interfaz.setVisible(true);
     }
     
-    public void iniciar(){
+    public void iniciar() throws IOException{
+    
+        Indicadores mindicador = new Indicadores();
+        valoreuro = mindicador.getValorDia("euro");
+        valordolar = mindicador.getValorDia("dolar");
+       
        //Escuchamos los botones
         interfazagregar.boton_guardar.setActionCommand( "boton_guardar" );
         interfazagregar.boton_guardar.addActionListener(this);
@@ -62,7 +72,29 @@ public class Controlador implements ActionListener {
        
         
         //Interactuar con el combobox
-        //interfaz.cb_monedas.addFocusListener((FocusListener) this);
+        ActionListener cbActionListener = new ActionListener() {//add actionlistner to listen for change
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String s = interfaz.cb_monedas.getSelectedItem().toString();
+
+                switch (s) {//check for a match
+                    case "Dólar":
+                       
+                        interfaz.tf_valor.setText(String.valueOf(valordolar));
+                       
+                        break;
+                    case "Euro":
+                        interfaz.tf_valor.setText(String.valueOf(valoreuro));
+                        break;
+                   
+                    default:
+                         interfaz.tf_valor.setText("");
+                    break;
+                }
+            }
+        };
+        interfaz.cb_monedas.addActionListener(cbActionListener);
        
         //Interactuar con la tabla
        // interfaz.tabla.addMouseListener(this);
@@ -74,10 +106,12 @@ public class Controlador implements ActionListener {
         switch ( Accion.valueOf( e.getActionCommand() ) ){
             case boton_guardar:
                 
-                int idproducto;
-                String nombreproducto;
+                int idproducto = 0;
+                String nombreproducto = "";
                 String moneda = "";
-                float precio;
+                float precio = 0;
+                
+                String errormsg = "";
                 
                 idproducto = Integer.parseInt(interfazagregar.tf_idproducto.getText());
                 nombreproducto = interfazagregar.tf_nombreproducto.getText();
@@ -89,13 +123,34 @@ public class Controlador implements ActionListener {
                     moneda = "euro";
                 }
                 
-                Producto nuevoproducto = new Producto(idproducto, nombreproducto, moneda, precio);
+                if (idproducto <= 0 ) {
+                    errormsg = "La ID del Producto debe ser mayor a 0";
+                }
                 
-                //modelo.grabar(nuevoproducto);
+                if (precio <= 0 ) {
+                    errormsg = "El precio debe ser mayor a 0";
+                }
                 
-               
+                if (nombreproducto.length() <= 2 ) {
+                    errormsg = "El nombre debe tener al menos 3 caracteres";
+                }
+                
+                if (moneda == "" ) {
+                    errormsg = "Debe escoger una moneda";
+                }  
+                
+                //validados los datos armamos el objeto y enviamos la info
+                if (errormsg == "") {
+                     Producto nuevoproducto = new Producto(idproducto, nombreproducto, moneda, precio);
+                      modelo.grabar(/*nuevoproducto*/);
+                } else {
+                    JOptionPane.showMessageDialog(null, errormsg, "Error", JOptionPane.WARNING_MESSAGE);
+                }
+                         
             break;
             case boton_refrescar:
+                //llamar tabla
+                interfaz.tabla.setModel(this.modelo.mostrar());
             break;
             
             case boton_agregar:

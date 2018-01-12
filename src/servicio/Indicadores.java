@@ -23,8 +23,8 @@ public class Indicadores  {
     public JsonObject objeto;
 
    public Indicadores () throws MalformedURLException, IOException {
-      
-         URL url = new URL("http://mindicador.cl/api/");
+     
+        URL url = new URL("http://mindicador.cl/api/");
         //ahora obtenemos el objeto json a partir de esa url
         InputStream entrada = url.openStream();
         JsonReader reader = Json.createReader(entrada);
@@ -35,8 +35,6 @@ public class Indicadores  {
     public Float getValorDia(String moneda) throws MalformedURLException, IOException{
         //seleccionaremos la parte del objeto que nos interesa e imprimiremos su valor
         float valor = Float.parseFloat(this.objeto.getJsonObject(moneda).get("valor").toString());
-        System.out.println("Valor: "+ valor);
-        System.out.println("JSON consumido :)");
         return valor;
     }
 

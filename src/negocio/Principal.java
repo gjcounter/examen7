@@ -5,15 +5,22 @@
  */
 package negocio;
 
+import accesodatos.ProductoDAO;
+import java.io.IOException;
+
 /**
  *
  * @author Duoc UC
  */
 public class Principal {
     
-     public static void main(String[] args) {
+     public static void main(String[] args) throws IOException {
         
-        new Controlador().iniciar();        
+        new Controlador().iniciar();
+        
+        //ProductoDAO test  = new ProductoDAO();
+        //test.grabar();
+        
         
     }
     
