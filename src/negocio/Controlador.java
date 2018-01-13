@@ -131,6 +131,10 @@ public class Controlador implements ActionListener  {
                     errormsg = "El precio debe ser mayor a 0";
                 }
                 
+                if (precio >= 1000 ) {
+                    errormsg = "El precio debe ser menor a 1000";
+                }
+                
                 if (nombreproducto.length() <= 2 ) {
                     errormsg = "El nombre debe tener al menos 3 caracteres";
                 }
@@ -142,7 +146,12 @@ public class Controlador implements ActionListener  {
                 //validados los datos armamos el objeto y enviamos la info
                 if (errormsg == "") {
                      Producto nuevoproducto = new Producto(idproducto, nombreproducto, moneda, precio);
-                      modelo.grabar(nuevoproducto);
+                      if (modelo.grabar(nuevoproducto)) {
+                          JOptionPane.showMessageDialog(null, "Se ha agregado un nuevo producto", "Agregar Producto", JOptionPane.INFORMATION_MESSAGE);
+                      } else {
+                          JOptionPane.showMessageDialog(null, "Ya existe un producto con esa ID", "Agregar Producto", JOptionPane.WARNING_MESSAGE);
+                      }
+                      
                 } else {
                     JOptionPane.showMessageDialog(null, errormsg, "Error", JOptionPane.WARNING_MESSAGE);
                 }
