@@ -97,7 +97,7 @@ public class Controlador implements ActionListener  {
         interfaz.cb_monedas.addActionListener(cbActionListener);
        
         //Interactuar con la tabla
-       // interfaz.tabla.addMouseListener(this);
+        interfaz.tabla.setModel(this.modelo.mostrar());
     }
 
     //asignamos acciones a los clicks
@@ -142,7 +142,7 @@ public class Controlador implements ActionListener  {
                 //validados los datos armamos el objeto y enviamos la info
                 if (errormsg == "") {
                      Producto nuevoproducto = new Producto(idproducto, nombreproducto, moneda, precio);
-                      modelo.grabar(/*nuevoproducto*/);
+                      modelo.grabar(nuevoproducto);
                 } else {
                     JOptionPane.showMessageDialog(null, errormsg, "Error", JOptionPane.WARNING_MESSAGE);
                 }

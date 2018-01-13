@@ -31,22 +31,23 @@ public class ProductoDAO {
     /**
      * Método que usted debe implementar
      */
-    public boolean grabar(){
-        boolean valor = false;
-        //Se arma la consulta
-        String q=" INSERT INTO examen7.producto(pr_id,pr_nombre,pr_moneda,pr_valormoneda)"
-                + "VALUES (9999,'aaaaa','dolar',111.11);";
-        //se ejecuta la consulta
-        try {
-            PreparedStatement pstm = conectara.conectar().prepareStatement(q);
-            if (pstm.executeUpdate() == 1){
-                valor = true;
+    public boolean grabar(Producto producto){
+        boolean valida = false;
+            //Se arma la consulta
+            String q=(" INSERT INTO examen7.producto(pr_id,pr_nombre,pr_moneda,pr_valormoneda) "
+                    + "VALUES ( " + producto.getId() + ",'" + producto.getNombre() + "','"+ producto.getMoneda() +"'," + producto.getValorMoneda() +");");
+            //se ejecuta la consulta
+            try {
+                PreparedStatement pstm = conectara.conectar().prepareStatement(q);
+               if(pstm.executeUpdate()==1){
+                   valida = true;
+               }
+                           
+            }catch(SQLException e){
+                System.err.println( e.getMessage() );
+                valida =false;
             }
-                     
-        }catch(SQLException e){
-            //System.err.println( e.getMessage() );
-        }
-        return valor;
+            return valida;
     }
     
     public DefaultTableModel mostrar(){
