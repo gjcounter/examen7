@@ -70,8 +70,8 @@ public class ProductoDAO {
          while(res.next()){ 
                 data[i][0] = res.getString( "pr_id" );
                 data[i][1] = res.getString( "pr_nombre" );
-                data[i][1] = res.getString( "pr_moneda" );
-                data[i][1] = res.getString( "pr_valormoneda" );
+                data[i][2] = res.getString( "pr_moneda" );
+                data[i][3] = res.getString( "pr_valormoneda" );
             i++;
          }
          res.close();
